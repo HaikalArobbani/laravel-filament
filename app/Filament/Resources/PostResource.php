@@ -10,6 +10,9 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\EditAction;
+use Filament\Forms\Components\Card;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -27,7 +30,7 @@ class PostResource extends Resource
             ->schema([
                 //
 
-                forms\Components\Card::make()
+                Forms\Components\Card::make()
                 ->schema([
 
                     // image
@@ -53,7 +56,8 @@ class PostResource extends Resource
                     Forms\Components\RichEditor::make('content')
                     ->label('Content')
                     ->placeholder('content')
-                    ->required(),
+                    ->required()
+                    ->formatStateUsing(fn ($state) => $state),
                     
                 ])
 
@@ -68,7 +72,8 @@ class PostResource extends Resource
                 //
             Tables\Columns\ImageColumn::make('image'),
             Tables\Columns\TextColumn::make('title')->searchable(),
-            Tables\Columns\TextColumn::make('category.name'),
+            Tables\Columns\TextColumn::make('content')->searchable()->html(),            
+            Tables\Columns\TextColumn::make('category.name'),            
             ])
             ->filters([
                 //
